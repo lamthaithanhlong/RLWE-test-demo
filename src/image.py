@@ -6,12 +6,12 @@ from rlwe_concept import RingLWECrypto
 # Assuming the RingLWECrypto class is defined as in the previous example
 
 # Process the image
-input_image_path = "data/input.jpg"  # Update this path
+input_image_path = "data/2.jpeg"  # Update this path
 encrypted_output_path = "data/encrypted_output.jpg"  # Update this path
 decrypted_output_path = "data/decrypted_output.jpg"  # Update this path
 
 # Initialize the Ring-LWE crypto system (using previously defined parameters)
-crypto = RingLWECrypto(n=256, q=7681)
+crypto = RingLWECrypto(n=128, q=7681, sigma=1)
 
 
 # Redefining the image processing functions from the provided scripts
@@ -28,6 +28,7 @@ def load_image(image_path, new_width):
 
     return img_array
 
+
 def save_image(image_array, output_path):
     """Saves a numpy array as a color image."""
     # Determine the mode based on the shape of the array
@@ -37,6 +38,7 @@ def save_image(image_array, output_path):
         mode = 'L'  # Grayscale image
     img = Image.fromarray(image_array.astype(np.uint8), mode=mode)
     img.save(output_path)
+
 
 def process_and_save_encrypted_image(image_path, encrypted_output_path, decrypted_output_path, crypto):
     # Load the original image without resizing to get original dimensions
