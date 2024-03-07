@@ -15,15 +15,18 @@ class RingLWECrypto:
         secret_key = (key_part1 + key_part2) % self.q
         return secret_key
 
-    def _add_noise(self, message):
-        """Introduces more complex noise to the message."""
-        if message.shape[0] < self.n:
-            padding_length = self.n - message.shape[0]
-            padded_message = np.pad(message, ((0, padding_length), (0, 0)), 'constant', constant_values=0)
-        else:
-            padded_message = message
-        noise = np.random.randint(-self.q // 150, self.q // 150 + 1, padded_message.shape)
-        noisy_message = (padded_message + noise) % self.q
+    def _add_noise(self, message, sigma=0.1):
+        """Adds Gaussian noise to a message.
+
+        Args:
+            message (np.array): The original message as a numpy array.
+            sigma (float): The standard deviation of the Gaussian noise.
+
+        Returns:
+            np.array: The message with Gaussian noise added.
+        """
+        noise = np.random.normal(0, sigma, size=message.shape)
+        noisy_message = (message + noise) % self.q  # Assume q is the modulus for your Ring-LWE scheme
         return noisy_message
 
     def _polynomial_multiplication(self, a, b):
